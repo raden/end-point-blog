@@ -45,31 +45,32 @@ Hello, World!
 
 Checking the process with `ps`
 ```plain
-# ps aux|grep Hello|grep -v grep
-najmi      84335  1.3  0.2 11535904 88128 pts/6  Sl+  12:15   0:00 java Hello.java
+# ps aux|grep Hello.java|grep -v grep
+najmi      61609 16.7  0.3 11541184 109360 pts/5 Sl+  01:19   0:00 java Hello.java
 ```
 Checking with jps will show the process ID
 From the "najmi" user view:
 ```plain
 # sudo -s -u najmi jps -l
-84442 jdk.jcmd/sun.tools.jps.Jps
-84335 jdk.compiler/com.sun.tools.javac.launcher.Main
+61609 jdk.compiler/com.sun.tools.javac.launcher.SourceLauncher
+61695 jdk.jcmd/sun.tools.jps.Jps
+
 ```
 From "root"'s user view:
 ```plain
 # whoami
 root
 # jps -l
-61330 jdk.compiler/com.sun.tools.javac.launcher.SourceLauncher
-61357 jdk.jcmd/sun.tools.jps.Jps
-# ]# ps aux|grep Hello.java|grep -v grep
-najmi      61330  1.1  0.3 11607748 109860 pts/5 Sl+  01:15   0:01 java Hello.java
+61609 jdk.compiler/com.sun.tools.javac.launcher.SourceLauncher
+61852 jdk.jcmd/sun.tools.jps.Jps
+# ps aux|grep Hello.java|grep -v grep
+najmi      61609  1.2  0.3 11541184 109360 pts/5 Sl+  01:19   0:01 java Hello.java
 ```
 
 But the nrpe user does not see it:
 ```plain
-# sudo -s -u nrpe  jps -l
-84643 jdk.jcmd/sun.tools.jps.Jps
+# sudo -s -u nrpe jps -l
+61790 jdk.jcmd/sun.tools.jps.Jps
 ```
 
 So instead of running the `jps` command directly as Nagios, we let the system run (as root) to run jps and dump the result onto a file. NRPE-based script later will read the output and feed the result to the dashboard. 

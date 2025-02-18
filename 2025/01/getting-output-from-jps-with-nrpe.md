@@ -83,7 +83,7 @@ I started `jetty` with sudo
 sudo /usr/share/jetty/bin/jetty.sh start
 ```
 
-Checked the status as the normal user. It sees is a not running.
+Checkthe status as the normal user. It sees the process as "not running".
 
 ```plain
   {  home }  /usr/share/jetty/bin/jetty.sh status
@@ -154,7 +154,7 @@ $ sudo jps -l
 $ sudo -s -u nrpe jps -l
 91711 jdk.jcmd/sun.tools.jps.Jps
 ```
-
+For now, we can opt whether to use "jetty" service script as the process check tool or we could use jps. For this writing's purpose, let us focus on `jps`.
 
 Consider the following example of a bash script, which will dump the Java process ID inside a temporary file. We can use this script to be invoked as an NRPE script.
 ```bash

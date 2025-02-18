@@ -117,7 +117,7 @@ Checked the jetty service status with `sudo`
   user on Tuesday at 10:53 AM                                                                                            0.372s  CPU: 17.01%  RAM: 32/33GB 
   {  home }  sudo /usr/share/jetty/bin/jetty.sh status
 ** WARNING: JETTY_LOGS is Deprecated. Please configure logging within the jetty base.
-Jetty running pid=XXXXX
+Jetty running pid=89969
 
 JAVA                  =  /usr/bin/java
 JAVA_OPTIONS          =  

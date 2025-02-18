@@ -49,14 +49,14 @@ Checking the process with `ps`
 najmi      61609 16.7  0.3 11541184 109360 pts/5 Sl+  01:19   0:00 java Hello.java
 ```
 Checking with jps will show the process ID
-From "najmi"'s user view:
+From "najmi" user view:
 ```plain
 # sudo -s -u najmi jps -l
 61609 jdk.compiler/com.sun.tools.javac.launcher.SourceLauncher
 61695 jdk.jcmd/sun.tools.jps.Jps
 
 ```
-From "root"'s user view:
+From "root" user view:
 ```plain
 # whoami
 root
@@ -67,7 +67,7 @@ root
 najmi      61609  1.2  0.3 11541184 109360 pts/5 Sl+  01:19   0:01 java Hello.java
 ```
 
-But the nrpe user does not see it:
+However, the nrpe user does not see it:
 ```plain
 # sudo -s -u nrpe jps -l
 61790 jdk.jcmd/sun.tools.jps.Jps

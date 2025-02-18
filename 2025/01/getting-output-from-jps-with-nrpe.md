@@ -188,7 +188,7 @@ The given example could be adapted with your use case.
 
 ### Conclusion
 
-This write up is just an example when we need to get the output from JPS (say, for whatever reason that we could not use the normal “ps” or “pgrep” command).
+This write up is just an example when we need to get the output from `jps. Most of time,“ps” or “pgrep” command might be adequate. As for the `jetty` service status above, the usage of `/usr/share/jetty/bin/jetty.sh status` might be fine as well, but still the subsequent process of filtering/parsing and feed the info to the NRPE plugin seems pretty much the same.
 
 There could be another way to solve this issue (which I might not be aware of). The method which I shared above is just one of the ways to get jps’ report works with Icinga/Nagios plugin. Please let me know if you have experience with jps and Icinga/Nagios - and how do you handle the reporting. 
 

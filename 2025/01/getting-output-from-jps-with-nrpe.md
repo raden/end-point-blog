@@ -83,7 +83,7 @@ I started `jetty` with sudo
 sudo /usr/share/jetty/bin/jetty.sh start
 ```
 
-Checkthe status as the normal user. It sees the process as "not running".
+Check the status as the normal user. It sees the process as "not running".
 
 ```plain
   {  home }  /usr/share/jetty/bin/jetty.sh status
@@ -112,7 +112,7 @@ USE_START_STOP_DAEMON =  0
 START_STOP_DAEMON     =  0
 ```
 
-Checked the jetty service status with `sudo`
+Let us check the jetty service status with `sudo`
 ```
   user on Tuesday at 10:53 AM                                                                                            0.372s  CPU: 17.01%  RAM: 32/33GB 
   {  home }  sudo /usr/share/jetty/bin/jetty.sh status
@@ -141,7 +141,7 @@ USE_START_STOP_DAEMON =  0
 START_STOP_DAEMON     =  0
 ```
 
-Let's validate it:
+Then, we are going validate it:
 
 ```plain
 $ sudo /usr/share/jetty/bin/jetty.sh status 2>/dev/null|grep "running pid"

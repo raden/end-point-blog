@@ -49,7 +49,7 @@ Checking the process with `ps`
 najmi      61609 16.7  0.3 11541184 109360 pts/5 Sl+  01:19   0:00 java Hello.java
 ```
 Checking with jps will show the process ID
-From the "najmi" user view:
+From "najmi"'s user view:
 ```plain
 # sudo -s -u najmi jps -l
 61609 jdk.compiler/com.sun.tools.javac.launcher.SourceLauncher
@@ -73,7 +73,88 @@ But the nrpe user does not see it:
 61790 jdk.jcmd/sun.tools.jps.Jps
 ```
 
-So instead of running the `jps` command directly as Nagios, we let the system run (as root) to run jps and dump the result onto a file. NRPE-based script later will read the output and feed the result to the dashboard. 
+So instead of running the `jps` command directly as Nagios, we let the system run (as root) to run jps and dump the result onto a file. NRPE-based script later will read the output and feed the result to the dashboard.
+
+Ok, now let us consider this case. We are going to check whether "jetty" service is running or not.
+
+I started `jetty` with sudo
+
+```plain
+sudo /usr/share/jetty/bin/jetty.sh start
+```
+
+Checked the status as the normal user. It sees is a not running.
+
+```plain
+  {  home }  /usr/share/jetty/bin/jetty.sh status
+** WARNING: JETTY_LOGS is Deprecated. Please configure logging within the jetty base.
+Jetty NOT running
+
+JAVA                  =  /usr/bin/java
+JAVA_OPTIONS          =  
+JETTY_HOME            =  /usr/share/jetty
+JETTY_BASE            =  /usr/share/jetty
+START_D               =  /usr/share/jetty/start.d
+START_INI             =  /usr/share/jetty/start.ini
+JETTY_START           =  /usr/share/jetty/start.jar
+JETTY_CONF            =  /usr/share/jetty/etc/jetty.conf
+JETTY_ARGS            =  jetty.state=/run/jetty/jetty.state jetty.pid=/run/jetty/jetty.pid --module=pid,state
+JETTY_RUN             =  /run/jetty
+JETTY_PID             =  /run/jetty/jetty.pid
+JETTY_START_LOG       =  /run/jetty/jetty-start.log
+JETTY_STATE           =  /run/jetty/jetty.state
+JETTY_START_TIMEOUT   =  60
+JETTY_SYS_PROPS       =  
+RUN_ARGS              =  -Djava.io.tmpdir=/tmp -Djetty.home=/usr/share/jetty -Djetty.base=/usr/share/jetty --class-path /etc/jetty/resources:/usr/share/jetty/lib/logging/slf4j-api-2.0.16.jar:/usr/share/jetty/lib/logging/jetty-slf4j-impl-12.0.16.jar:/usr/share/jetty/lib/jetty-http-12.0.16.jar:/usr/share/jetty/lib/jetty-server-12.0.16.jar:/usr/share/jetty/lib/jetty-xml-12.0.16.jar:/usr/share/jetty/lib/jetty-util-12.0.16.jar:/usr/share/jetty/lib/jetty-io-12.0.16.jar org.eclipse.jetty.xml.XmlConfiguration java.version=23.0.1 jetty.base=/usr/share/jetty jetty.base.uri=file:///usr/share/jetty jetty.home=/usr/share/jetty jetty.home.uri=file:///usr/share/jetty jetty.pid=/run/jetty/jetty.pid jetty.state=/run/jetty/jetty.state jetty.webapp.addHiddenClasses=org.eclipse.jetty.logging.,file:///usr/share/jetty/lib/logging/,org.slf4j. runtime.feature.alpn=true slf4j.version=2.0.16 /etc/jetty/jetty-bytebufferpool.xml /etc/jetty/jetty-pid.xml /etc/jetty/jetty-threadpool.xml /etc/jetty/jetty.xml /etc/jetty/jetty-state.xml
+ID                    =  uid=1000(user) gid=1000(user) groups=1000(user),90(network),98(power),984(users),987(storage),991(lp),994(input),996(audio),998(wheel)
+JETTY_USER            =  jetty
+USE_START_STOP_DAEMON =  0
+START_STOP_DAEMON     =  0
+```
+
+Checked the jetty service status with `sudo`
+```
+  user on Tuesday at 10:53 AM                                                                                            0.372s  CPU: 17.01%  RAM: 32/33GB 
+  {  home }  sudo /usr/share/jetty/bin/jetty.sh status
+** WARNING: JETTY_LOGS is Deprecated. Please configure logging within the jetty base.
+Jetty running pid=XXXXX
+
+JAVA                  =  /usr/bin/java
+JAVA_OPTIONS          =  
+JETTY_HOME            =  /usr/share/jetty
+JETTY_BASE            =  /usr/share/jetty
+START_D               =  /usr/share/jetty/start.d
+START_INI             =  /usr/share/jetty/start.ini
+JETTY_START           =  /usr/share/jetty/start.jar
+JETTY_CONF            =  /usr/share/jetty/etc/jetty.conf
+JETTY_ARGS            =  jetty.state=/run/jetty/jetty.state jetty.pid=/run/jetty/jetty.pid --module=pid,state
+JETTY_RUN             =  /run/jetty
+JETTY_PID             =  /run/jetty/jetty.pid
+JETTY_START_LOG       =  /run/jetty/jetty-start.log
+JETTY_STATE           =  /run/jetty/jetty.state
+JETTY_START_TIMEOUT   =  60
+JETTY_SYS_PROPS       =  
+RUN_ARGS              =  -Djava.io.tmpdir=/tmp -Djetty.home=/usr/share/jetty -Djetty.base=/usr/share/jetty --class-path /etc/jetty/resources:/usr/share/jetty/lib/logging/slf4j-api-2.0.16.jar:/usr/share/jetty/lib/logging/jetty-slf4j-impl-12.0.16.jar:/usr/share/jetty/lib/jetty-http-12.0.16.jar:/usr/share/jetty/lib/jetty-server-12.0.16.jar:/usr/share/jetty/lib/jetty-xml-12.0.16.jar:/usr/share/jetty/lib/jetty-util-12.0.16.jar:/usr/share/jetty/lib/jetty-io-12.0.16.jar org.eclipse.jetty.xml.XmlConfiguration java.version=23.0.1 jetty.base=/usr/share/jetty jetty.base.uri=file:///usr/share/jetty jetty.home=/usr/share/jetty jetty.home.uri=file:///usr/share/jetty jetty.pid=/run/jetty/jetty.pid jetty.state=/run/jetty/jetty.state jetty.webapp.addHiddenClasses=org.eclipse.jetty.logging.,file:///usr/share/jetty/lib/logging/,org.slf4j. runtime.feature.alpn=true slf4j.version=2.0.16 /etc/jetty/jetty-bytebufferpool.xml /etc/jetty/jetty-pid.xml /etc/jetty/jetty-threadpool.xml /etc/jetty/jetty.xml /etc/jetty/jetty-state.xml
+ID                    =  uid=0(root) gid=0(root) groups=0(root)
+JETTY_USER            =  jetty
+USE_START_STOP_DAEMON =  0
+START_STOP_DAEMON     =  0
+```
+
+Let's validate it:
+
+```plain
+$ sudo /usr/share/jetty/bin/jetty.sh status 2>/dev/null|grep "running pid"
+Jetty running pid=89969
+
+$ sudo jps -l
+89969 org.eclipse.jetty.xml.XmlConfiguration
+91635 jdk.jcmd/sun.tools.jps.Jps
+
+$ sudo -s -u nrpe jps -l
+91711 jdk.jcmd/sun.tools.jps.Jps
+```
+
 
 Consider the following example of a bash script, which will dump the Java process ID inside a temporary file. We can use this script to be invoked as an NRPE script.
 ```bash
